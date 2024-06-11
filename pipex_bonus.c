@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 10:39:13 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/06/11 16:07:32 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/06/11 16:46:42 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,27 @@ static char	*ft_pathfinder(char *argv, char **envp, char ***flags)
 	char	**d_paths;
 	char	*path;
 	int		i;
+	char	*endl;
 
 	i = 0;
 	while (ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
-	d_paths = ft_split(ft_substr(envp[i], 5, ft_strlen(envp[i]) - 5), ':');
+	path = ft_substr(envp[i], 5, ft_strlen(envp[i]) - 5);
+	d_paths = ft_split(path, ':');
+	free(path);
 	if (!d_paths)
 		ft_puterrorstr("Error: Command not found");
 	*flags = ft_split(argv, ' ');
-	//el d_path correspondiente hay que guardarlo en un tmp para despues poder liberarlo y en el access de la linea 45 no hago join de d_path sino de tmp
 	i = 0;
-	while (d_paths[i] && access(ft_strjoin(ft_strjoin(d_paths[i], "/"), *flags[0]), X_OK) < 0) //hay que hacer un split modificado para que termine todos los d_paths con / y que eso se anada a flags[0]
-		i++;
-	path = ft_strjoin(ft_strjoin(d_paths[i], "/"), *flags[0]);
+	endl = ft_strjoin("/", *flags[0]);
+	path = ft_strjoin(d_paths[0], endl);
+	while (d_paths[i++] && access(path, X_OK) < 0)
+	{
+		free(path);
+		path = ft_strjoin(d_paths[i], endl);
+	}
+	ft_free(d_paths);
+	ft_free(*flags);
 	return (path);
 }
 
@@ -55,6 +63,7 @@ static void	ft_execute_cmd(t_arg_list *lst, int *pipefd, int i)
 	path = ft_pathfinder(lst->argv[i], lst->envp, &lst->flags);
 	if (execve(path, lst->flags, lst->envp) < 0)
 	{
+		free(path);
 		perror("Error: ");
 		exit(1);
 	}
@@ -84,6 +93,7 @@ static void	do_cmd(t_arg_list *lst, int fd)
 		dup2(pipefd[0], STDIN_FILENO);
 		i++;
 	}
+	free(lst);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -91,6 +101,7 @@ int	main(int argc, char **argv, char **envp)
 	int		fd;
 	char	**flags;
 
+	int original = dup(STDOUT_FILENO);
 	flags = NULL;
 	if (access(argv[1], R_OK | F_OK) == -1)
 		return (perror("Error: "), 0);
@@ -98,10 +109,11 @@ int	main(int argc, char **argv, char **envp)
 	if (fd == -1)
 		return (1);
 	do_cmd(ft_define_lst(argc, argv, flags, envp), fd);
+	close(fd);
 	fd = open(argv[argc - 1], O_WRONLY, 0777);
 	if (fd == -1)
 		return (1);
-	dup2(fd, STDOUT_FILENO);
-	execve(ft_pathfinder(argv[argc - 2], envp, &flags), flags, envp);
+	dup2(STDOUT_FILENO, original);
+	execve(ft_pathfinder(argv[argc - 2], envp, &flags), flags, envp); //como cerrar el ultimo fd
 	return (0);
 }
