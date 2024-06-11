@@ -6,11 +6,10 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 10:39:13 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/06/10 18:51:45 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/06/11 16:07:32 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./libft/libft.h"
 #include "pipex.h"
 
 t_arg_list	*ft_define_lst(int argc, char **argv, char **flags, char **envp)
@@ -36,6 +35,8 @@ static char	*ft_pathfinder(char *argv, char **envp, char ***flags)
 	while (ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	d_paths = ft_split(ft_substr(envp[i], 5, ft_strlen(envp[i]) - 5), ':');
+	if (!d_paths)
+		ft_puterrorstr("Error: Command not found");
 	*flags = ft_split(argv, ' ');
 	//el d_path correspondiente hay que guardarlo en un tmp para despues poder liberarlo y en el access de la linea 45 no hago join de d_path sino de tmp
 	i = 0;
@@ -45,29 +46,39 @@ static char	*ft_pathfinder(char *argv, char **envp, char ***flags)
 	return (path);
 }
 
-void	do_cmd(t_arg_list *lst)
+static void	ft_execute_cmd(t_arg_list *lst, int *pipefd, int i)
 {
 	char	*path;
+
+	close(pipefd[0]);
+	dup2(pipefd[1], STDOUT_FILENO);
+	path = ft_pathfinder(lst->argv[i], lst->envp, &lst->flags);
+	if (execve(path, lst->flags, lst->envp) < 0)
+	{
+		perror("Error: ");
+		exit(1);
+	}
+}
+
+static void	do_cmd(t_arg_list *lst, int fd)
+{
 	int		pipefd[2];
 	int		i;
-	int		fd;
+	int		child;
 
 	i = 2;
-	fd = open(lst->argv[1], O_RDONLY, 0777);
 	dup2(fd, STDIN_FILENO);
 	while (i < lst->argc - 2)
 	{
 		if (pipe(pipefd) == -1)
+			perror("Error: ");
+		child = fork();
+		if (child == 0)
 		{
+			ft_execute_cmd(lst, pipefd, i);
 		}
-		if (fork() == 0)
-		{
-			close(pipefd[0]);
-			dup2(pipefd[1], STDOUT_FILENO);
-			path = ft_pathfinder(lst->argv[i], lst->envp, &lst->flags);
-			if (execve(path, lst->flags, lst->envp) < 0)
-				exit(1);
-		}
+		else if (child == -1)
+			perror("Error: ");
 		wait(0);
 		close(pipefd[1]);
 		dup2(pipefd[0], STDIN_FILENO);
@@ -81,9 +92,12 @@ int	main(int argc, char **argv, char **envp)
 	char	**flags;
 
 	flags = NULL;
-	//if (access(argv[1], R_OK | F_OK) == -1)
-		//return (perror(argv[0]), NULL);
-	do_cmd(ft_define_lst(argc, argv, flags, envp));
+	if (access(argv[1], R_OK | F_OK) == -1)
+		return (perror("Error: "), 0);
+	fd = open(argv[1], O_RDONLY, 0777);
+	if (fd == -1)
+		return (1);
+	do_cmd(ft_define_lst(argc, argv, flags, envp), fd);
 	fd = open(argv[argc - 1], O_WRONLY, 0777);
 	if (fd == -1)
 		return (1);

@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/24 15:17:00 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/06/11 16:01:52 by aarenas-         ###   ########.fr       */
+/*   Created: 2024/06/11 15:52:49 by aarenas-          #+#    #+#             */
+/*   Updated: 2024/06/11 16:03:41 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
-# include <sys/wait.h>
-# include "./libft/libft.h"
+#include "pipex.h"
 
-typedef struct s_arg_list
+void	ft_puterrorstr(char *str)
 {
-	int					argc;
-	char				**argv;
-	char				**flags;
-	char				**envp;
-	struct s_arg_list	*next;
+	int	i;
 
-}	t_arg_list;
-
-void	ft_puterrorstr(char *str);
-
-#endif
+	i = 0;
+	while (str[i])
+	{
+		write(2, &str[i], 1);
+		i++;
+	}
+	exit(1);
+}
