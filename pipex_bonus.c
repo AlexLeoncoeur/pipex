@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 10:39:13 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/06/11 16:46:42 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:50:29 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static char	*ft_pathfinder(char *argv, char **envp, char ***flags)
 {
 	char	**d_paths;
 	char	*path;
-	int		i;
 	char	*endl;
+	int		i;
 
 	i = 0;
 	while (ft_strncmp(envp[i], "PATH=", 5) != 0)
@@ -49,8 +49,8 @@ static char	*ft_pathfinder(char *argv, char **envp, char ***flags)
 		free(path);
 		path = ft_strjoin(d_paths[i], endl);
 	}
-	ft_free(d_paths);
-	ft_free(*flags);
+	free(endl);
+	//ft_free(*flags);
 	return (path);
 }
 
@@ -59,8 +59,9 @@ static void	ft_execute_cmd(t_arg_list *lst, int *pipefd, int i)
 	char	*path;
 
 	close(pipefd[0]);
-	dup2(pipefd[1], STDOUT_FILENO);
+	//dup2(pipefd[1], STDOUT_FILENO);
 	path = ft_pathfinder(lst->argv[i], lst->envp, &lst->flags);
+	printf("%s %s %s\n", path, lst->flags[0], lst->flags[1]);
 	if (execve(path, lst->flags, lst->envp) < 0)
 	{
 		free(path);
@@ -72,8 +73,8 @@ static void	ft_execute_cmd(t_arg_list *lst, int *pipefd, int i)
 static void	do_cmd(t_arg_list *lst, int fd)
 {
 	int		pipefd[2];
-	int		i;
 	int		child;
+	int		i;
 
 	i = 2;
 	dup2(fd, STDIN_FILENO);
@@ -83,9 +84,7 @@ static void	do_cmd(t_arg_list *lst, int fd)
 			perror("Error: ");
 		child = fork();
 		if (child == 0)
-		{
 			ft_execute_cmd(lst, pipefd, i);
-		}
 		else if (child == -1)
 			perror("Error: ");
 		wait(0);
@@ -101,7 +100,6 @@ int	main(int argc, char **argv, char **envp)
 	int		fd;
 	char	**flags;
 
-	int original = dup(STDOUT_FILENO);
 	flags = NULL;
 	if (access(argv[1], R_OK | F_OK) == -1)
 		return (perror("Error: "), 0);
@@ -113,7 +111,13 @@ int	main(int argc, char **argv, char **envp)
 	fd = open(argv[argc - 1], O_WRONLY, 0777);
 	if (fd == -1)
 		return (1);
-	dup2(STDOUT_FILENO, original);
-	execve(ft_pathfinder(argv[argc - 2], envp, &flags), flags, envp); //como cerrar el ultimo fd
+	dup2(fd, STDOUT_FILENO);
+	if (execve(ft_pathfinder(argv[argc - 2], envp, &flags), flags, envp) < 0)
+	{
+		ft_free(flags);
+		close(fd);
+		perror("Error: ");
+		return (1);
+	}
 	return (0);
 }
