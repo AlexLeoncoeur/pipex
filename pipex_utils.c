@@ -6,11 +6,26 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 15:52:49 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/06/11 16:40:16 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/06/14 16:52:55 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+t_arg_list	*ft_define_lst(int argc, char **argv, char **envp)
+{
+	t_arg_list	*aux;
+
+	aux = malloc(sizeof(t_arg_list));
+	if (aux == NULL)
+		return (NULL);
+	aux->argc = argc;
+	aux->argv = argv;
+	aux->flags = NULL;
+	aux->envp = envp;
+	aux->next = NULL;
+	return (aux);
+}
 
 void	ft_puterrorstr(char *str)
 {
