@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 10:39:13 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/06/14 17:15:45 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:39:39 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,16 @@ static char	*ft_definitive_path(t_arg_list *lst, int pos, char **d_paths)
 	i = 0;
 	endl = ft_strjoin("/", lst->flags[0]);
 	path = ft_strjoin(d_paths[0], endl);
-	while (d_paths[i++] && access(path, X_OK) < 0)
+	while (d_paths[i] && access(path, X_OK) < 0)
 	{
 		free(path);
 		path = ft_strjoin(d_paths[i], endl);
+		i++;
 	}
 	if (d_paths[i])
 		return (free(endl), path);
-	return (NULL);
+	free(path);
+	return (free(endl), NULL);
 }
 
 static char	*ft_pathfinder(t_arg_list *lst, int pos)
@@ -90,7 +92,11 @@ static void	do_cmd(t_arg_list *lst, int fd)
 			ft_execute_cmd(lst, pipefd, i);
 		else if (child == -1)
 			perror("Error");
-		waitpid(0); //Mirar como funciona para que termine todo el programa si el hijo la caga
+		if (waitpid(-1, NULL, 0) == -1)
+		{
+			perror("Error");
+			exit(1);
+		}
 		close(pipefd[1]);
 		dup2(pipefd[0], STDIN_FILENO);
 		i++;
@@ -103,16 +109,16 @@ int	main(int argc, char **argv, char **envp)
 	t_arg_list	*lst;
 
 	if (access(argv[1], R_OK) == -1)
-		return (perror("Error "), 0);
+		return (perror("Error"), 0);
 	fd = open(argv[1], O_RDONLY, 0777);
 	if (fd == -1)
 		return (1);
 	lst = ft_define_lst(argc, argv, envp);
 	do_cmd(lst, fd);
 	close(fd);
-	fd = open(argv[argc - 1], O_WRONLY, 0777);
+	fd = open(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	if (fd == -1)
-		return (1);
+		return (ft_freeanderror(lst), 1);
 	dup2(fd, STDOUT_FILENO);
 	if (execve(ft_pathfinder(lst, argc - 2), lst->flags, envp) < 0)
 	{
