@@ -68,20 +68,20 @@ static void	ft_execute_cmd(t_arg_list *lst, int *pipefd, int i)
 	path = ft_pathfinder(lst, i);
 	if (execve(path, lst->flags, lst->envp) < 0)
 	{
+		perror(lst->flags[1]);
 		free(path);
 		ft_free(lst->flags);
-		perror("Error");
 		exit(1);
 	}
 }
 
-static void	do_cmd(t_arg_list *lst, int fd)
+static void	ft_do_cmd(t_arg_list *lst, int fd)
 {
 	int		pipefd[2];
 	int		child;
 	int		i;
 
-	i = 2;
+	i = 3;
 	dup2(fd, STDIN_FILENO);
 	while (i < lst->argc - 2)
 	{
@@ -103,20 +103,77 @@ static void	do_cmd(t_arg_list *lst, int fd)
 	}
 }
 
+void	ft_here_doc(int *pipefd, char **argv)
+{
+	char	*str;
+
+	close(pipefd[0]);
+	while (1)
+	{
+		str = get_next_line(0);
+		if (ft_strncmp(str, argv[2], ft_strlen(argv[2])) == 0)
+			exit(0);
+		ft_putstr_fd(str, pipefd[1]);
+		free(str);
+		str = NULL;
+	}
+}
+
+int	ft_check_heredoc(char **argv)
+{
+	int		fd;
+	int		pipefd[2];
+	int		child;
+
+	if (ft_strncmp("here_doc", argv[1], 8) == 0)
+	{
+
+		fd = pipe(pipefd);
+		if (fd == -1)
+			perror("Error");
+		child = fork();
+		if (child == 0)
+			ft_here_doc(pipefd, argv);
+		if (waitpid(-1, NULL, 0) == -1)
+		{
+			perror("Error");
+			exit(1);
+		}
+		close(pipefd[1]);
+		return (pipefd[0]);
+	}
+	else
+	{
+		if (access(argv[1], R_OK) == -1)
+			return (perror("Error"), 0);
+		fd = open(argv[1], O_RDONLY, 0777);
+		if (fd == -1)
+			return (-1);
+	}
+	return (fd);
+}
+
+int	ft_openfile(char **argv, int argc)
+{
+	int	fd;
+
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+		fd = open(argv[argc - 1], O_CREAT | O_WRONLY | O_APPEND, 0777);
+	else
+		fd = open(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
+	return (fd);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	int			fd;
 	t_arg_list	*lst;
 
-	if (access(argv[1], R_OK) == -1)
-		return (perror("Error"), 0);
-	fd = open(argv[1], O_RDONLY, 0777);
-	if (fd == -1)
-		return (1);
+	fd = ft_check_heredoc(argv);
 	lst = ft_define_lst(argc, argv, envp);
-	do_cmd(lst, fd);
+	ft_do_cmd(lst, fd);
 	close(fd);
-	fd = open(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
+	fd = ft_openfile(argv, argc);
 	if (fd == -1)
 		return (ft_freeanderror(lst), 1);
 	dup2(fd, STDOUT_FILENO);

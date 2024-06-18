@@ -1,1 +1,45 @@
+1
+1
+1
+2
+1
+0
+total 1380
+-rwxr-xr-x 1 aarenas- 2024_malaga 1311888 Jun 18 17:09 a.out
+-rw-r--r-- 1 aarenas- 2024_malaga      11 Jun 17 15:31 hola.txt
+drwxr-xr-x 2 aarenas- 2024_malaga    4096 Jun 18 17:09 libft
+-rw-r--r-- 1 aarenas- 2024_malaga      86 Jun 18 15:13 main.c
+-rw-r--r-- 1 aarenas- 2024_malaga     344 May 22 12:35 Makefile
+-rwxr-xr-x 1 aarenas- 2024_malaga   30176 Jun 17 16:51 pipex_bonus
+-rw-r--r-- 1 aarenas- 2024_malaga    4093 Jun 18 17:08 pipex_bonus.c
+-rw-r--r-- 1 aarenas- 2024_malaga    3210 Jun 18 12:53 pipex.c
+-rw-r--r-- 1 aarenas- 2024_malaga    1308 Jun 17 13:58 pipex.h
+-rw-r--r-- 1 aarenas- 2024_malaga    1500 Jun 17 13:58 pipex_utils.c
+-rw-r--r-- 1 aarenas- 2024_malaga      39 Jun 10 18:55 pipo.txt
+-rwxr-xr-x 1 aarenas- 2024_malaga      12 Jun 18 17:13 resultado.txt
+-rw-r--r-- 1 aarenas- 2024_malaga       2 Jun 10 18:52 resultadovd
+-rwxr-xr-x 1 aarenas- 2024_malaga   16752 Jun 18 15:50 test
+total 1380
+-rwxr-xr-x 1 aarenas- 2024_malaga 1311888 Jun 18 17:09 a.out
+-rw-r--r-- 1 aarenas- 2024_malaga      11 Jun 17 15:31 hola.txt
+drwxr-xr-x 2 aarenas- 2024_malaga    4096 Jun 18 17:09 libft
+-rw-r--r-- 1 aarenas- 2024_malaga      86 Jun 18 15:13 main.c
+-rw-r--r-- 1 aarenas- 2024_malaga     344 May 22 12:35 Makefile
+-rwxr-xr-x 1 aarenas- 2024_malaga   30176 Jun 17 16:51 pipex_bonus
+-rw-r--r-- 1 aarenas- 2024_malaga    4093 Jun 18 17:08 pipex_bonus.c
+-rw-r--r-- 1 aarenas- 2024_malaga    3210 Jun 18 12:53 pipex.c
+-rw-r--r-- 1 aarenas- 2024_malaga    1308 Jun 17 13:58 pipex.h
+-rw-r--r-- 1 aarenas- 2024_malaga    1500 Jun 17 13:58 pipex_utils.c
+-rw-r--r-- 1 aarenas- 2024_malaga      39 Jun 10 18:55 pipo.txt
+-rwxr-xr-x 1 aarenas- 2024_malaga     926 Jun 18 17:15 resultado.txt
+-rw-r--r-- 1 aarenas- 2024_malaga       2 Jun 10 18:52 resultadovd
+-rwxr-xr-x 1 aarenas- 2024_malaga   16752 Jun 18 15:50 test
+0
+1
+2
 3
+4
+1
+2
+0
+0
