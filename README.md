@@ -9,7 +9,6 @@ Pipex is a project that simulates the behavior of shell pipelines using pipes in
 - [Introduction 🔗](#introduction-🔗)
 - [Features 🌟](#features-🌟)
 - [Requirements 📋](#requirements-📋)
-- [Installation 🛠️](#installation-🛠️)
 - [Usage 💻](#usage-💻)
 - [Normal vs. Bonus Pipex 📊](#normal-vs-bonus-pipex-📊)
 - [Testing ✅](#testing-✅)
@@ -26,21 +25,6 @@ Pipex is a project that simulates the behavior of shell pipelines using pipes in
 - A Unix-like operating system (Linux or macOS).
 - A C compiler (gcc or clang).
 - Make.
-
-## Installation 🛠️
-
-1. Clone the repository:
-
-    ```bash
-    git clone https://github.com/your_username/pipex.git
-    cd pipex
-    ```
-
-2. Compile the project:
-
-    ```bash
-    make
-    ```
 
 ## Usage 💻
 
