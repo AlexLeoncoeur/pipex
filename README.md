@@ -51,6 +51,7 @@ The `bonus` allows for here_doc and more commands to be used:
 ```bash
 ./pipex here\_doc LIMITER cmd1 cmd2 ... cmdn outfile
 ```
+For example:
 
 ```bash
 ./pipex here\_doc . "cat" "grep hello" outfile
