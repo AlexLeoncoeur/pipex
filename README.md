@@ -33,19 +33,27 @@ Run the `pipex` program with the following syntax:
 ./pipex infile cmd1 cmd2 outfile
 ```
 
-The `bonus` allows for more commands to be use:
-
-```bash
-./pipex infile cmd1 cmd2 ... cmdn outfile
-```
-
 For example:
 
 ```bash
 ./pipex infile "grep a" "wc -l" outfile
 ```
-
 This command will execute `grep a` on `infile`, pipe the output to `wc -l`, and save the final result in `outfile`.
+
+The `bonus` allows for here_doc and more commands to be used:
+
+```bash
+./pipex infile cmd1 cmd2 ... cmdn outfile
+```
+
+```bash
+./pipex here\_doc LIMITER cmd1 cmd2 ... cmdn outfile
+```
+
+```bash
+./pipex here\_doc . "cat" "grep hello" outfile
+```
+
 
 ## Normal vs. Bonus Pipex 📊
 
