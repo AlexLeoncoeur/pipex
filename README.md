@@ -33,7 +33,7 @@ Run the `pipex` program with the following syntax:
 ./pipex infile cmd1 cmd2 outfile
 ```
 
-The bonus allows for more commands to be use:
+The `bonus` allows for more commands to be use:
 
 ```bash
 ./pipex infile cmd1 cmd2 ... cmdn outfile
