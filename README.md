@@ -27,6 +27,7 @@ Pipex is a project that simulates the behavior of shell pipelines using pipes in
 
 ## Usage 💻
 
+### Basic
 Run the `pipex` program with the following syntax:
 
 ```bash
