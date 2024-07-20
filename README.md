@@ -24,7 +24,6 @@ Pipex is a project that simulates the behavior of shell pipelines using pipes in
 
 - A Unix-like operating system (Linux or macOS).
 - A C compiler (gcc or clang).
-- Make.
 
 ## Usage 💻
 
