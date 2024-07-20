@@ -40,6 +40,7 @@ For example:
 ```
 This command will execute `grep a` on `infile`, pipe the output to `wc -l`, and save the final result in `outfile`.
 
+### Bonus
 The `bonus` allows for here_doc and more commands to be used:
 
 ```bash
