@@ -6,13 +6,13 @@ Pipex is a project that simulates the behavior of shell pipelines using pipes in
 
 ## Table of Contents 📑
 
-- [Introduction 🔗](#introduction-🔗)
+- [Introduction 🔗](#introduction-)
 - [Features 🌟](#features-🌟)
-- [Learning Outcomes 🎓](#learning-outcomes-🎓)
-- [Requirements 📋](#requirements-📋)
-- [Usage 💻](#usage-💻)
-- [Normal vs. Bonus Pipex 📊](#normal-vs-bonus-pipex-📊)
-- [Testing ✅](#testing-✅)
+- [Learning Outcomes 🎓](#learning-outcomes-)
+- [Requirements 📋](#requirements-)
+- [Usage 💻](#usage-)
+- [Normal vs. Bonus Pipex 📊](#normal-vs-bonus-pipex-)
+- [Testing ✅](#testing-)
 
 ## Features 🌟
 
