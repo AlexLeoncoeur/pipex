@@ -8,6 +8,7 @@ Pipex is a project that simulates the behavior of shell pipelines using pipes in
 
 - [Introduction 🔗](#introduction-🔗)
 - [Features 🌟](#features-🌟)
+- [Learning Outcomes 🎓](#learning-outcomes-🎓)
 - [Requirements 📋](#requirements-📋)
 - [Usage 💻](#usage-💻)
 - [Normal vs. Bonus Pipex 📊](#normal-vs-bonus-pipex-📊)
@@ -19,6 +20,18 @@ Pipex is a project that simulates the behavior of shell pipelines using pipes in
 - Reads input from a specified file and writes output to another file.
 - Handles multiple commands in sequence.
 - Provides error handling for common issues like command not found.
+
+## Learning Outcomes 🎓
+
+Using the Pipex program helps you learn and reinforce several key concepts in Unix-like operating systems and C programming, including:
+
+- **Process Creation and Management**: Understanding how to create and manage processes using `fork()`.
+- **Inter-Process Communication**: Using pipes (`pipe()`) to enable communication between processes.
+- **File Descriptor Manipulation**: Redirecting input and output using `dup2()` to handle file descriptors.
+- **Command Execution**: Utilizing `execve()` to execute commands within a new process.
+- **Error Handling**: Implementing robust error checking and handling to deal with common issues like file access errors and command execution failures.
+- **Dynamic Memory Management**: Properly managing memory allocation and deallocation to avoid leaks.
+- **Shell-Like Behavior**: Simulating the behavior of shell pipelines, enhancing your understanding of how shells process commands and manage I/O.
 
 ## Requirements 📋
 
